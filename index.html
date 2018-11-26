@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<title>Ingreso de pacientes</title>
+		<link rel="icon" href="resources/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Carlos Alvarez Linares">
+		<link href="css/style.css" rel="stylesheet" />
+		<script src="js/script.js"></script>
+	</head>
+	<body onload="dia(); startTime(); nombreNavegador();">
+		<div class="container">
+			<div class="row">
+				<div id="navegador" class="col-2"></div>
+				<div id="fechaHoy" class="col-8"></div>
+				<div id="hora" class="col-2"></div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<h2>Tabla de pacientes</h2>
+					<hr>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<h3>Citas</h3>
+					<hr>
+				</div>
+			</div>
+			<form name="formulario">
+				<div class="row">
+					<div class="col-2 col-s-12">
+						<label for="nombreID">Nombre:</label><br>
+						<input id="nombreID" name="nombre" type="text" placeholder="Nombre..." tabindex="1" autofocus required>
+					</div>
+					<div class="col-2 col-s-12">
+						<label for="dniID">DNI:</label><br>
+						<input id="dniID" name="dni" type="text" placeholder="DNI..." tabindex="2" required>
+					</div>
+					<div class="col-2 col-s-12">
+						<label for="telefonoID">Teléfono:</label><br>
+						<input id="telefonoID" name="telefono" type="tel" tabindex="3" placeholder="Teléfono...">
+					</div>
+					<div class="col-2 col-s-12">
+						<label for="emailID">E-mail:</label><br>
+						<input id="emailID" name="email" type="email" placeholder="E-mail..." tabindex="4">
+					</div>
+					<div class="col-2 col-s-12">
+						<label for="fechaID">Fecha:</label><br>
+						<input id="fechaID" name="fecha" type="date" tabindex="5" required>
+					</div>
+					<div class="col-2 col-s-12">
+						<br>
+						<button type="button" class="button button1" onclick="enviarDatos()" tabindex="6">Guardar</button>
+					</div>
+				</div>
+			</form>
+			<div class="col-12"><h3>Resumen</h3><hr></div>
+			<div class="row">
+				<div id="errores" class="col-12 col-s-12"></div>
+			</div>
+			<div id="datos" class="row"></div>
+		</div>
+	</body>
+</html>
