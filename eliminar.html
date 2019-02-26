@@ -6,19 +6,20 @@
 		<meta name="author" content="Carlos Alvarez Linares">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" href="./resources/edit.ico">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="./css/style.css">
 		<script type="text/javascript" src="./js/script.js"></script>
 	</head>
 	<body>
 		<div class="container">
-			<div class="row"><div class="col-12"><h3>¿Está seguro de esta acción?</h3><hr></div></div>
+			<div class="row mt-3"><div class="col-12"><h3>¿Está seguro de esta acción?</h3><hr></div></div>
 			<form id="formularioEliminar">
 				<div class="row">
 					<div class="col-6">
-						<button id="eliminarNewID" type="button" class="button button3" onclick="confirmar()" tabindex="2">Eliminar</button>
+						<button id="eliminarNewID" type="button" class="btn btn-outline-danger col-12" onclick="confirmar()" tabindex="2">Eliminar</button>
 					</div>
 					<div class="col-6">
-						<button id="cancelarNewID" type="button" class="button button4" onclick="window.close()" tabindex="1">Cancelar</button>
+						<button id="cancelarNewID" type="button" class="btn btn-secondary col-12" onclick="window.close()" tabindex="1">Cancelar</button>
 					</div>
 				</div>
 				<div class="row">

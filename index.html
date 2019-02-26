@@ -6,15 +6,28 @@
 		<link rel="icon" href="resources/favicon.ico">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="author" content="Carlos Alvarez Linares">
-		<link href="css/style.css" rel="stylesheet" />
-		<script src="js/script.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+		<link rel="stylesheet" href="css/style.css">
 	</head>
-	<body onload="dia(); startTime(); nombreNavegador();">
-		<div class="container">
-			<div class="row">
-				<div id="navegador" class="col-2"></div>
-				<div id="fechaHoy" class="col-8"></div>
-				<div id="hora" class="col-2"></div>
+	<body onload="dia(); startTime(); nombreNavegador(); primerPaciente();">
+		<!--
+			1. Eventos de ratón (2 además de onclick).
+			* 2. Eventos de teclado para validaciones de campos (2 como mínimo).
+			* 3. Expresiones regulares (3 como mínimo).
+			* 4. Empleo de cookies.
+			* 5. DOM: creación de varios elementos de forma dinámica en el documento
+			utilizando las propiedades y métodos necesarios para ello.
+			* 6. Una carpeta denominada js que contenga las funciones JavaScript con los
+			requerimientos que se piden en el proyecto.
+		-->
+		<div id="cookieID" class="bg-secondary p-5 text-light"></div>
+		<div class="container-fluid">
+			<div class="row sticky-top bg-white pt-3">
+				<div id="navegador" class="col-sm"></div>
+				<div id="fechaHoy" class="col-sm"></div>
+				<div id="hora" class="col-sm"></div>
+				<div id="cookie" class="col-sm text-sm-right"><button class="btn btn-info btn-sm" ondblclick="checkCookie()"><i class="fas fa-cookie-bite"></i> <small>Ver cookies (Double click)</small></button></div>
 			</div>
 			<div class="row">
 				<div class="col-12">
@@ -30,37 +43,54 @@
 			</div>
 			<form name="formulario">
 				<div class="row">
-					<div class="col-2 col-s-12">
+					<div class="col-md">
 						<label for="nombreID">Nombre:</label><br>
-						<input id="nombreID" name="nombre" type="text" placeholder="Nombre..." tabindex="1" autofocus required>
+						<input id="nombreID" class="form-control" name="nombre" type="text" placeholder="Nombre..." tabindex="1" onkeydown="return validarTecla(event)" autofocus required>
 					</div>
-					<div class="col-2 col-s-12">
+					<div class="col-md">
 						<label for="dniID">DNI:</label><br>
-						<input id="dniID" name="dni" type="text" placeholder="DNI..." tabindex="2" required>
+						<input id="dniID" class="form-control" name="dni" type="text" placeholder="DNI..." tabindex="2" required>
 					</div>
-					<div class="col-2 col-s-12">
+					<div class="col-md">
 						<label for="telefonoID">Teléfono:</label><br>
-						<input id="telefonoID" name="telefono" type="tel" tabindex="3" placeholder="Teléfono...">
+						<div class="input-group">
+							<div class="input-group-prepend">
+					    	<span class="input-group-text">+34</span>
+					  	</div>
+							<input id="telefonoID" class="form-control" name="telefono" type="tel" tabindex="3"  onkeypress="return validarTelefonoEvento(event)" placeholder="Teléfono...">
+						</div>
 					</div>
-					<div class="col-2 col-s-12">
+					<div class="col-md">
 						<label for="emailID">E-mail:</label><br>
-						<input id="emailID" name="email" type="email" placeholder="E-mail..." tabindex="4">
+						<input id="emailID" class="form-control" name="email" type="email" placeholder="E-mail..." tabindex="4">
 					</div>
-					<div class="col-2 col-s-12">
+					<div class="col-md">
 						<label for="fechaID">Fecha:</label><br>
-						<input id="fechaID" name="fecha" type="date" tabindex="5" required>
+						<input id="fechaID" class="form-control" name="fecha" type="date" tabindex="5" required>
 					</div>
-					<div class="col-2 col-s-12">
-						<br>
-						<button type="button" class="button button1" onclick="enviarDatos()" tabindex="6">Guardar</button>
+					<div class="col-md">
+						<label for="redSocialID">Red social:</label><br>
+						<input id="redSocialID" class="form-control" name="redsocial" type="text" placeholder="Red social..." tabindex="6">
+					</div>
+					<div class="col-md-1">
+						<label for="fechaID">&nbsp;</label><br>
+						<button type="button" class="btn btn-success col-12" onclick="enviarDatos()" tabindex="7"><i class="fas fa-save"></i></button>
 					</div>
 				</div>
 			</form>
-			<div class="col-12"><h3>Resumen</h3><hr></div>
+
+			<div class="row mt-3">
+				<div class="col-12"><h3>Resumen</h3><hr></div>
+			</div>
+
 			<div class="row">
 				<div id="errores" class="col-12 col-s-12"></div>
 			</div>
+
 			<div id="datos" class="row"></div>
 		</div>
-	</body>
+
+		<script src="js/script.js"></script>
+		<!--<script type="text/javascript" src="https://api.ipify.org/?format=jsonp&callback=get_ip"></script>-->
+</body>
 </html>

@@ -5,23 +5,26 @@ var Pacientes = new Array();
 var ventanaEliminar;
 
 /*---OBJETO---*/
-function Paciente(nombre, dni, telefono, email, fecha){
+function Paciente(nombre, dni, telefono, email, fecha, red){
 	this.nombre = nombre;
 	this.dni = dni;
 	this.telefono = telefono;
 	this.email = email;
 	this.fecha = fecha;
+	this.red = red;
 }
 
 /*---GUARDAR PACIENTE---*/
-function GuardarPaciente(nombre, dni, telefono, email, fecha){
+function GuardarPaciente(nombre, dni, telefono, email, fecha, red){
 	let Posicion = Pacientes.push(new Paciente(
 		nombre,
 		dni,
-		telefono,
+		"+34" + telefono,
 		email,
 		fecha,
+		red,
 	)) - 1;
+	console.log(Pacientes);
 	return Posicion;
 }
 
@@ -39,17 +42,42 @@ function validarTexto(texto) {
 	}
 	return validador;
 }
+function validarTecla(e){
+	let tecla = e.which || e.keyCode;
+	if((tecla >= 65 && tecla <= 90) || (tecla == 32) || (tecla >= 37 && tecla <= 40) || (tecla == 222) || (tecla == 16) || (tecla == 8) || (tecla == 46) || (tecla == 9)){ return true;	}
+	else { return false; }
+}
 
 function validarDNI(DNI) {
-	var letrasDNI = 'TRWAGMYFPDXBNJZSQVHLCKET';
-	var letraUltima = DNI.substring(8,9);
-	var numeroDNINumbers = parseInt(DNI.substring(0,8));
-	var letraUltimaMyus = letraUltima.toUpperCase();
-	var division = parseInt(numeroDNINumbers % 23);
-	if(!(DNI.length <= 0)) {
-		if(letrasDNI.substring(division, division +1) === letraUltimaMyus) return true;
-	}
+	var validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
+  var nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]$/i;
+  var nieRexp = /^[XYZ][0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]$/i;
+  var str = DNI.toString().toUpperCase();
+
+  if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
+
+  var nie = str
+      .replace(/^[X]/, '0')
+      .replace(/^[Y]/, '1')
+      .replace(/^[Z]/, '2');
+
+  var letter = str.substr(-1);
+  var charIndex = parseInt(nie.substr(0, 8)) % 23;
+
+  if (validChars.charAt(charIndex) === letter) return true;
+
+  return false;
+}
+
+function validarTelefono(telefono){
+	if(/^[9|6]{1}([\d]{2}[-]*){3}[\d]{2}$/.test(telefono)) return true;
 	return false;
+}
+
+function validarTelefonoEvento(e){
+	let tecla = e.which || e.charCode;
+	if((tecla >= 48 && tecla <= 57) || (tecla == 8) || (tecla == 46)  || (tecla >= 37 && tecla <= 40) || (tecla == 9)){	return true; }
+	else { return false; }
 }
 
 function validarFecha(fecha) {
@@ -65,41 +93,53 @@ function validarEmail(email) {
 	return false;
 }
 
+function validarURL(url){
+	if(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(url)) return true;
+	return false;
+}
+
 /*---ESCRIBIR EN HTML Y MOSTRAR LOS DATOS---*/
 function escribirHTML(id, contenido){
 	document.getElementById(id).innerHTML = contenido;
 }
 function mostrarDatos(){
-	let res = '<form name="formMostrar">';
+	let res = '<form name="formMostrar" class="col-12">';
 	for (let i = 0; i < Pacientes.length; i++) {
 		res += '<div id="' + i + '" class="row">'
-		+ '<div>'
-		+ '<div class="row">'
-		+ '<div class="col-2 col-s-12">'
-		+ '<div>Nombre:</div>'
-		+ '<div id="nombreRes" class="data">' + Pacientes[i].nombre + '</div>'
+		+ '<div class="col-md-1">'
+		+ '<div class="font-weight-bold">#:</div>'
+		+ '<div id="nombreRes" class="ellip" title="'+ (i + 1) + '">' + (i + 1) + '</div>'
 		+ '</div>'
-		+ '<div class="col-2 col-s-12">'
-		+ '<div>DNI:</div>'
-		+ '<div id="dniRes" class="data">' + Pacientes[i].dni + '</div>'
+		+ '<div class="col-md-2">'
+		+ '<div class="font-weight-bold">Nombre:</div>'
+		+ '<div id="nombreRes" class="ellip" title="'+ Pacientes[i].nombre + '">' + Pacientes[i].nombre + '</div>'
 		+ '</div>'
-		+ '<div class="col-2 col-s-12">'
-		+ '<div>Teléfono:</div>'
-		+ '<div id="telRes" class="data">' + Pacientes[i].telefono + '</div>'
+		+ '<div class="col-md-1">'
+		+ '<div class="font-weight-bold">DNI:</div>'
+		+ '<div id="dniRes" class="ellip" title="'+ Pacientes[i].dni.toUpperCase() + '">' + Pacientes[i].dni.toUpperCase() + '</div>'
 		+ '</div>'
-		+ '<div class="col-2 col-s-12">'
-		+ '<div>E-mail:</div>'
-		+ '<div id="emailRes" class="data">' + Pacientes[i].email + '</div>'
+		+ '<div class="col-md-2">'
+		+ '<div class="font-weight-bold">Teléfono:</div>'
+		+ '<div id="telRes" class="ellip" title="'+ Pacientes[i].telefono + '"><a href=tel:' + Pacientes[i].telefono + '>' + Pacientes[i].telefono + '</a></div>'
 		+ '</div>'
-		+ '<div class="col-2 col-s-12">'
-		+ '<div>Fecha:</div>'
-		+ '<div id="fechaRes" class="data">' + Pacientes[i].fecha + '</div>'
+		+ '<div class="col-md-2">'
+		+ '<div class="font-weight-bold">E-mail:</div>'
+		+ '<div id="emailRes" class="ellip" title="'+ Pacientes[i].email + '"><a href=mailto:' + Pacientes[i].email + ' target="_blank">' + Pacientes[i].email + '</a></div>'
 		+ '</div>'
-		+ '<div class="col-2 col-s-12">'
+		+ '<div class="col-md-1">'
+		+ '<div class="font-weight-bold">Fecha:</div>'
+		+ '<div id="fechaRes" class="ellip" title="'+ Pacientes[i].fecha + '">' + Pacientes[i].fecha + '</div>'
+		+ '</div>'
+		+ '<div class="col-md-2">'
+		+ '<div class="font-weight-bold">Red social:</div>'
+		+ '<div id="fechaRes" class="ellip" title="'+ Pacientes[i].red + '"><a href=' + Pacientes[i].red + ' target="_blank">' + Pacientes[i].red + '</a></div>'
+		+ '</div>'
+		+ '<div class="col-md-1">'
 		+ '<label></label><br>'
-		+ '<button class="button button3 ' + i + '" name="eliminar" type="button" tabindex="7" onclick="eliminarPaciente(' + i + ')">Eliminar</button>'
+		+ '<button class="col-12 btn btn-outline-danger ' + i + '" name="eliminar" type="button" tabindex="7" onclick="eliminarPaciente(' + i + ')"><i class="fas fa-trash"></i></button>'
 		+ '</div>'
-		+ '</div>'
+		+ '<div class="col-12">'
+		+ '<hr>'
 		+ '</div>'
 		+ '</div>';
 	}
@@ -112,23 +152,37 @@ function enviarDatos() {
 	let dniData = document.formulario.dni.value;
 	let telefonoData = document.formulario.telefono.value;
 	let emailData = document.formulario.email.value;
-	let fechaData = document.formulario.fecha.value;
+	let fechaData = new Date(document.formulario.fecha.value);
+	let redSocial = document.formulario.redsocial.value;
 
 	let respuestaError = '';
 
 	if(!validarTexto(nombreData)) respuestaError += '* El nombre no es correcto<br/>';
 	if(!validarDNI(dniData)) respuestaError += '* El DNI no es correcto<br/>';
-	if(!telefonoData || isNaN(telefonoData)) respuestaError += '* El telefono no es correcto<br/>';
+	if(!validarTelefono(telefonoData)) respuestaError += '* El telefono no es correcto<br/>';
 	if(!validarEmail(emailData)) respuestaError += '* El email no es correcto<br/>';
 	if(!validarFecha(fechaData)) respuestaError += '* La fecha es inferior a la fecha actual<br/>';
+	if(!validarURL(redSocial)) respuestaError += '* La URL no es correcta';
 
 	if(respuestaError == '') { // En caso de que haya un error, el campo no estará vacío
 		document.getElementById('errores').style.display = 'none';
-		if(GuardarPaciente(nombreData, dniData, telefonoData, emailData, fechaData) >= 0) mostrarDatos();
+		if(GuardarPaciente(nombreData, dniData, telefonoData, emailData, fechaData.toLocaleDateString(), redSocial) >= 0) mostrarDatos();
 	} else {
 		document.getElementById('errores').style.display = 'block';
-		escribirHTML('errores', '<p style="color:red;">' + respuestaError + '</p>');
+		escribirHTML('errores', '<p class="text-danger">' + respuestaError + '</p>');
 	}
+}
+
+function primerPaciente(){
+	nombre = 'Carlos Alvarez L.';
+	dni = '12345678a';
+	telefono = '654321987';
+	email = 'alvarez15755@iesmarenostrum.com';
+	fecha = new Date();
+	fecha = fecha.toLocaleDateString();
+	red = 'https://twitter.com/carlitos_al_li';
+	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
+	mostrarDatos();
 }
 
 /*---ELIMINAR PACIENTE---*/
@@ -146,6 +200,11 @@ function eliminarCompleto(pos){
 	document.getElementById(pos).style.display = 'none';
 	Pacientes.splice(pos, 1);
 	escribirHTML('errores', '<p style="color:red;">Eliminado correctamente</p>');
+}
+
+/*---IP---*/
+function getIP(obj){
+	return obj.ip;
 }
 
 /*---FECHA---*/
@@ -197,7 +256,7 @@ function dia(){
   }
   var anyo = fecha.getFullYear();
   var res = dia + ' de ' + mes + ' de ' + anyo;
-  escribirHTML('fechaHoy', '<p style="text-align:center; color: #4CAF50;">' + res + '</p>');
+  escribirHTML('fechaHoy', '<p class="text-success text-md-center">' + res + '</p>');
 }
 
 /*---HORA---*/
@@ -208,7 +267,7 @@ function startTime() {
   var s = today.getSeconds();
   m = checkTime(m);
   s = checkTime(s);
-  escribirHTML('hora', '<p style="text-align:right; color: #4CAF50;"><b>' + h + ':' + m + ':' + s + '</b></p>');
+  escribirHTML('hora', '<p class="text-success text-md-right"><b>' + h + ':' + m + ':' + s + '</b></p>');
   var t = setTimeout(startTime, 500);
 }
 function checkTime(i) {
@@ -222,7 +281,7 @@ function nombreNavegador(){
   var navegador = ['Edge', 'Safari', 'Chrome', 'Firefox'];
   for(var i = 0; i < navegador.length; i++){
     if(nombreG.indexOf(navegador[i]) != -1)
-        escribirHTML('navegador','<p style="text-align:left; color: #4CAF50;">' + navegador[i] + ': ' + pantallaSize() + '</p>');
+        escribirHTML('navegador','<p class="text-success">' + navegador[i] + ': ' + pantallaSize() + '</p>');
   }
 }
 
@@ -238,7 +297,52 @@ function pantallaSize(){
 	return respuesta;
 }
 
-/*function ordenar(){
-	Pacientes.sort();
-	mostrarDatos();
-}*/
+
+/*---COOKIE---*/
+function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  var user=getCookie("username");
+  if (user != "") {
+		document.getElementById("cookieID").innerHTML = "Bienvenido <b>" + user + "</b>!";
+		mostrarCookie();
+    /*alert("Bienvenido " + user);*/
+  } else {
+     user = prompt("Por favor escriba su nombre:","");
+     if (user != "" && user != null) {
+       setCookie("username", user, 30);
+     }
+  }
+}
+
+function mostrarCookie() {
+  var x = document.getElementById("cookieID");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+		x.style.transition = "all 0.5s";
+  } else {
+    x.style.display = "none";
+		x.style.transition = "all 0.5s";
+  }
+}
