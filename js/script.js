@@ -183,6 +183,16 @@ function primerPaciente(){
 	red = 'https://twitter.com/carlitos_al_li';
 	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
 	mostrarDatos();
+
+	nombre = 'Nelson Ramos G.';
+	dni = '32165478g';
+	telefono = '665478123';
+	email = 'ramos99999@iesmarenostrum.com';
+	fecha = new Date();
+	fecha = fecha.toLocaleDateString();
+	red = 'http://www.google.es';
+	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
+	mostrarDatos();
 }
 
 /*---ELIMINAR PACIENTE---*/
@@ -325,7 +335,7 @@ function getCookie(cname) {
 function checkCookie() {
   var user=getCookie("username");
   if (user != "") {
-		document.getElementById("cookieID").innerHTML = "Bienvenido <b>" + user + "</b>!";
+		document.getElementById("cookieID").innerHTML = "<p class=\"m-0\">Bienvenido <b>" + user + "</b>!</p>";
 		mostrarCookie();
     /*alert("Bienvenido " + user);*/
   } else {
@@ -335,14 +345,17 @@ function checkCookie() {
      }
   }
 }
+function deleteCookie(name) {
+    document.cookie = name + '=; Max-Age=-99999999;';
+}
 
 function mostrarCookie() {
   var x = document.getElementById("cookieID");
   if (x.style.display === "none") {
     x.style.display = "block";
-		x.style.transition = "all 0.5s";
+		x.style.transition = "all 1s";
   } else {
     x.style.display = "none";
-		x.style.transition = "all 0.5s";
+		x.style.transition = "all 1s";
   }
 }
