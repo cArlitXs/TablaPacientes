@@ -193,6 +193,36 @@ function primerPaciente(){
 	red = 'http://www.google.es';
 	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
 	mostrarDatos();
+
+	nombre = 'Alejandro Marin G.';
+	dni = '45612378c';
+	telefono = '564789123';
+	email = 'marin99999@iesmarenostrum.com';
+	fecha = new Date();
+	fecha = fecha.toLocaleDateString();
+	red = 'http://www.yahoo.es';
+	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
+	mostrarDatos();
+
+	nombre = 'Jesús Aldea';
+	dni = '12345678f';
+	telefono = '456789123';
+	email = 'aldea99999@iesmarenostrum.com';
+	fecha = new Date();
+	fecha = fecha.toLocaleDateString();
+	red = 'http://www.bing.es';
+	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
+	mostrarDatos();
+
+	nombre = 'Alberto Chillerón';
+	dni = '78945612r';
+	telefono = '654789123';
+	email = 'chilleron99999@iesmarenostrum.com';
+	fecha = new Date();
+	fecha = fecha.toLocaleDateString();
+	red = 'http://www.lol.es';
+	GuardarPaciente(nombre, dni, telefono, email, fecha, red);
+	mostrarDatos();
 }
 
 /*---ELIMINAR PACIENTE---*/
